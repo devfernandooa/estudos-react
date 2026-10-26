@@ -30,7 +30,7 @@ Pré-requisitos: Ter o [Node.js](https://nodejs.org/) instalado.
 
 ```bash
 # 1. Clone este repositório
-git clone https://github.com/devfernandooar/mini-tasks.git
+git clone https://github.com/devfernandooa/mini-tasks.git
 
 # 2. Entre na pasta do projeto
 cd mini-tasks
