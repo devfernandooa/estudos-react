@@ -16,8 +16,8 @@
 | 2 | Componentes e Props | [x] | |
 | 3 | Estado com useState | [~] | Já criei o array de tarefas e derivei os contadores |
 | 4 | Eventos e formulários controlados | [ ] | |
-| 5 | useEffect e ciclo de vida | [ ] | |
-| 6 | Listas, keys e renderização condicional | [x] | Apliquei .map() e key na lista de tarefas |
+| 5 | useEffect e ciclo de vida | [x] | |
+| 6 | Listas, keys e renderização condicional | [x] | |
 | 7 | Projeto integrador (Mini-Tasks) | [~] | Base do projeto criada e rodando |
 
 ## Registro de sessões (append-only)
@@ -40,17 +40,12 @@
 - **Próximo passo:**
   - Iniciar o Dia 4: Criar um formulário controlado (input + botão) para adicionar novas tarefas ao estado.
 
-### Sessão 1 — __/__/____
-- **O que fiz:**
-- **O que aprendi:**
-- **O que travou:**
-- **Próximo passo:**
 
-### Sessão 2 — __/__/____
-- **O que fiz:**
-- **O que aprendi:**
-- **O que travou:**
-- **Próximo passo:**
+### Sessão 2 — 27/10/2026
+- **O que fiz:** Implementei a persistência de dados com `useEffect` e `localStorage`. Criei os filtros de visualização (Todas, Pendentes, Concluídas) e corrigi a lógica de estado.
+- **O que aprendi:** Como funciona a inicialização "Lazy" do `useState` (passando uma função em vez de um valor). A importância do array de dependências no `useEffect` (`[tarefas]`) para disparar a gravação apenas quando o estado muda. Entendi como a imutabilidade do estado funciona com o Spread Operator (`...tarefas`).
+- **O que travou:** Tive um erro de escopo com a variável `tarefasSalvas` (tentei usá-la fora do `useState`) e um erro de digitação no filtro. Corrigido!
+- **Próximo passo:** Iniciar a Semana 2, integrando Firebase Auth e React Router ao projeto (ou criar o sandbox da Semana 2).
 
 ## Critério de conclusão da Semana 1 (copiado do MIGRACAO_REACT.md)
 - [ ] Criar um componente React do zero.
@@ -59,3 +54,10 @@
 - [ ] Criar uma rota com React Router e navegar entre telas.
       (Obs.: Router e Tailwind entram oficialmente nas Semanas 2 e 3 — na Semana 1
        fazemos só uma "prévia" opcional do Tailwind no projeto integrador.)
+
+
+       ### Sessão 3 — [Data de Hoje]
+- **O que fiz:** Iniciei os preparativos para a Semana 2. Instalei o `react-router-dom` e implementei o roteamento (SPA). Refatorei a arquitetura do projeto, movendo a lógica das telas do `App.jsx` para arquivos separados na pasta `src/pages/`. Criei navegação entre Home, Login e Tarefas usando `<Link>`.
+- **O que aprendi:** A diferença crucial entre usar a tag `<a>` do HTML (que recarrega a página inteira) e o `<Link>` do React Router (que faz a transição instantânea mantendo o estado da aplicação). A importância de manter o `App.jsx` limpo (Separation of Concerns) para facilitar a escalabilidade.
+- **O que travou:** Entender a hierarquia correta das pastas (não colocar tudo dentro da pasta `login`). 
+- **Próximo passo:** Configurar o Firebase Auth para fazer o login real e proteger a rota `/tarefas` (o usuário só poderá ver as tarefas se estiver logado).
