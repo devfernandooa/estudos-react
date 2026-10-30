@@ -17,6 +17,30 @@
   }
 }
 
+.nav-bar ul {
+  display: flex;
+  gap: 20px;
+  flex-direction: row;
+  list-style: none;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  text-decoration: none;
+}
+
+.nav-bar ul li {
+    border: 1px solid var(--accent-bg);
+    border-radius: 8px;
+    padding: 8px 16px;
+    
+}
+.nav-bar a {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
 .hero {
   position: relative;
 
