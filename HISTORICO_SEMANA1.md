@@ -61,3 +61,9 @@
 - **O que aprendi:** A diferença crucial entre usar a tag `<a>` do HTML (que recarrega a página inteira) e o `<Link>` do React Router (que faz a transição instantânea mantendo o estado da aplicação). A importância de manter o `App.jsx` limpo (Separation of Concerns) para facilitar a escalabilidade.
 - **O que travou:** Entender a hierarquia correta das pastas (não colocar tudo dentro da pasta `login`). 
 - **Próximo passo:** Configurar o Firebase Auth para fazer o login real e proteger a rota `/tarefas` (o usuário só poderá ver as tarefas se estiver logado).
+
+### Sessão 4 — [Data de Hoje] (Semana 2)
+- **O que fiz:** Configurei o Firebase no projeto. Criei o `AuthContext` para gerenciar o estado do usuário globalmente. Criei o componente `RotaProtegida` para bloquear o acesso à página de Tarefas sem login. Implementei a tela de Login com inputs controlados, loading state, e tratamento de erros. Integrei o Firebase Auth (`signInWithEmailAndPassword`).
+- **O que aprendi:** O poder da Context API para evitar "prop drilling" (passar props por todos os componentes). A importância do `onAuthStateChanged` para manter a sessão viva ao recarregar a página (F5). A diferença entre renderizar uma tela e redirecionar uma rota (`Navigate`).
+- **O que travou:** Entender que os Hooks (como `useNavigate`) não podem ser chamados dentro de funções, apenas no topo do componente. Corrigido!
+- **Próximo passo:** Substituir o `localStorage` pelo Firestore, salvando as tarefas na nuvem atreladas ao ID do usuário logado.
