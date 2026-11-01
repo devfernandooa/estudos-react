@@ -1,121 +1,81 @@
 import FormularioTarefa from '../components/FormularioTarefa';
 import ItemTarefa from '../components/ItemTarefa';
 import { useState, useEffect } from 'react';
-
+import { useAuth } from '../contexts/AuthContext';
+// 1. Importamos as funções do nosso serviço
+import { escutarTarefas, adicionarTarefa, atualizarTarefa, removerTarefa } from '../services/tarefaService';
 
 function Tarefas() {
-   const [tarefas, setTarefas] = useState(() => {
-    // 1. Pega o item do localStorage
-    const tarefasSalvas = localStorage.getItem('@mini-tasks:tarefas');
-    
-    // 2. Se existir, converte de string para objeto/array e retorna
-    if (tarefasSalvas) {
-      return JSON.parse(tarefasSalvas);
-    }
-
-    // 3. Se não existir (primeira vez), retorna o array inicial padrão
-    return [
-      { id: 1, titulo: "Estudar React", concluida: false },
-      { id: 2, titulo: "Fazer exercícios", concluida: true },
-      { id: 3, titulo: "Criar o Mini-Tasks", concluida: false },
-    ];
-  });
+  const { user } = useAuth();
+  const [tarefas, setTarefas] = useState([]);
+  const [filtro, setFiltro] = useState('todas');
 
   useEffect(() => {
-    localStorage.setItem('@mini-tasks:tarefas', JSON.stringify(tarefas));
-  }, [tarefas]);
+    // 2. Se não tiver usuário, limpa a tela e para
+    if (!user) {
+      setTarefas([]);
+      return;
+    }
 
-  // 1. Função para ADICIONAR tarefa
-  function adicionarTarefa(textoDigitado) {
-    const novaTarefa = {
-      // Gera um ID único baseado no timestamp atual
-      id: Date.now(),
-      titulo: textoDigitado,
-      concluida: false,
-    };
-    // Atualiza o estado criando um NOVO array com a tarefa nova
-    setTarefas([...tarefas, novaTarefa]);
-  }
+    // 3. O "espião" (onSnapshot) vai atualizar o setTarefas sozinho
+    const unsubscribe = escutarTarefas(user.uid, setTarefas);
+    return () => unsubscribe();
+  }, [user]);
 
-  // 2. Função para CONCLUIR/DESCONCLUIR tarefa (bônus do Dia 6)
-  function alternarConclusao(id) {
-    const tarefasAtualizadas = tarefas.map(tarefa => {
-      if (tarefa.id === id) {
-        // Inverte o valor (se era true vira false, se era false vira true)
-        return { ...tarefa, concluida: !tarefa.concluida };
-      }
-      return tarefa;
-    });
-    setTarefas(tarefasAtualizadas);
-  }
+  // 4. Os handlers agora só chamam o serviço. Não usam mais setTarefas!
+  const handleAdicionar = async (textoDigitado) => {
+    await adicionarTarefa(textoDigitado, user.uid);
+  };
 
+  const handleAlternar = async (id) => {
+    const tarefa = tarefas.find(t => t.id === id);
+    if (tarefa) {
+      await atualizarTarefa(id, !tarefa.concluida);
+    }
+  };
 
-  // 3. Função para REMOVER tarefa (bônus do Dia 6)
-  function removerTarefa(id) {
-    // Filtra o array, mantendo apenas os itens cujo ID é diferente do ID passado
-    const tarefasFiltradas = tarefas.filter(tarefa => tarefa.id !== id);
-    setTarefas(tarefasFiltradas);
-  }
+  const handleRemover = async (id) => {
+    await removerTarefa(id);
+  };
 
-  // 4. Cálculos derivados (O que tinha sumido)
+  // 5. Cálculos derivados
   const pendentes = tarefas.filter(t => !t.concluida).length;
   const total = tarefas.length;
-  const [filtro, setFiltro] = useState('todas'); //TODAS, PENDENTES, CONCLUIDAS
 
   const tarefasFiltradas = tarefas.filter(tarefa => {
     if (filtro === 'pendentes') return !tarefa.concluida;
-    if (filtro === 'concluidas') return tarefa.concuida;
-    return true; // Se for todas retorna todas
-  })
+    if (filtro === 'concluidas') return tarefa.concluida;
+    return true;
+  });
+
   return (
     <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '600px', margin: '0 auto' }}>
       <h1>Mini-Tasks</h1>
 
-      {/* Passamos a função adicionarTarefa como prop */}
-      <FormularioTarefa onAdicionar={adicionarTarefa} />
+      {/* 6. Passando os handlers para os componentes */}
+      <FormularioTarefa onAdicionar={handleAdicionar} />
 
-      <p>
-        {total} tarefa(s) — {pendentes} pendente(s)
-      </p>
+      <p>{total} tarefa(s) — {pendentes} pendente(s)</p>
 
-      {/* Renderização condicional para quando não houver tarefas */}
       {tarefas.length === 0 && <p>Nenhuma tarefa cadastrada. Adicione uma acima!</p>}
+      {tarefas.length > 0 && tarefasFiltradas.length === 0 && <p>Nenhuma tarefa nesta categoria.</p>}
 
-      {tarefasFiltradas.length === 0 && <p>Nenhuma tarefa nesta categoria.</p>}
       {tarefasFiltradas.map(tarefa => (
         <ItemTarefa
           key={tarefa.id}
           titulo={tarefa.titulo}
           concluida={tarefa.concluida}
-          aoClicar={() => alternarConclusao(tarefa.id)}
-          aoRemover={() => removerTarefa(tarefa.id)}
+          aoClicar={() => handleAlternar(tarefa.id)}
+          aoRemover={() => handleRemover(tarefa.id)}
         />
       ))}
 
-
-      <div style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
-        <button
-          onClick={() => setFiltro('todas')}
-          style={{ fontWeight: filtro === 'todas' ? 'bold' : 'normal' }}
-        >
-          Todas
-        </button>
-        <button
-          onClick={() => setFiltro('pendentes')}
-          style={{ fontWeight: filtro === 'pendentes' ? 'bold' : 'normal' }}
-        >
-          Pendentes
-        </button>
-        <button
-          onClick={() => setFiltro('concluidas')}
-          style={{ fontWeight: filtro === 'concluidas' ? 'bold' : 'normal' }}
-        >
-          Concluídas
-        </button>
+      <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
+        <button onClick={() => setFiltro('todas')} style={{ fontWeight: filtro === 'todas' ? 'bold' : 'normal' }}>Todas</button>
+        <button onClick={() => setFiltro('pendentes')} style={{ fontWeight: filtro === 'pendentes' ? 'bold' : 'normal' }}>Pendentes</button>
+        <button onClick={() => setFiltro('concluidas')} style={{ fontWeight: filtro === 'concluidas' ? 'bold' : 'normal' }}>Concluídas</button>
       </div>
     </div>
-
-
   );
 }
 

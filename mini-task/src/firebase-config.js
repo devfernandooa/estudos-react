@@ -2,20 +2,20 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBjK3hfbPjAbRj1EGC9WZW4iAb3qWTJ0j4",
-  authDomain: "mini-tasks-722db.firebaseapp.com",
-  projectId: "mini-tasks-722db",
-  storageBucket: "mini-tasks-722db.firebasestorage.app",
-  messagingSenderId: "1043190078398",
-  appId: "1:1043190078398:web:cf177fa00ac4f89390f7ef",
-  measurementId: "G-R0V6N1WZPF"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
-
-
 export const auth = getAuth(app);
+export const db = getFirestore(app);
