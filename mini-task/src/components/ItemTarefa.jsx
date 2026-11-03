@@ -2,36 +2,27 @@
 //Recebe duas props: titulo (texto da tarefa) e concluida (boolean)
 function Itemtarefa({ titulo, concluida, aoClicar, aoRemover }) {
     return (
-        <div style={{
-            border: '1px solid #ccc',
-            padding: '10px',
-            margin: '5px 0',
-            borderRadius: '4px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            textDecoration: concluida ? 'line-through' : 'none',
-            backgroundColor: concluida ? '#f0f0f0' : 'white'
-        }}>
+        <div className='flex items-center justify-between p-4 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm'
+        >
             {/* Clicar no texto marca/desmarca */}
-            <span
+            < span
                 onClick={aoClicar}
-                style={{ cursor: 'pointer', flex: 1 }}
+                className="cursor-pointer flex-1 text-gray-800"
                 title="Clique para marcar/desmarcar"
             >
                 {titulo}
                 {concluida && <span> ✅</span>}
-            </span>
+            </span >
 
             {/* Botão de remover */}
-            <button
+            < button
                 onClick={aoRemover}
-                style={{ marginLeft: '10px', cursor: 'pointer', background: 'none', border: 'none' }}
+                className="text-red-500 hover:text-red-700 transition-colors ml-4 text-lg bg-transparent border-none cursor-pointer"
                 title="Remover tarefa"
             >
                 ❌
-            </button>
-        </div>
+            </button >
+        </div >
     )
 }
 

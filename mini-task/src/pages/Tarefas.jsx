@@ -2,6 +2,7 @@ import FormularioTarefa from '../components/FormularioTarefa';
 import ItemTarefa from '../components/ItemTarefa';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import Botao from '../components/ui/Botao';
 // 1. Importamos as funções do nosso serviço
 import { escutarTarefas, adicionarTarefa, atualizarTarefa, removerTarefa } from '../services/tarefaService';
 
@@ -11,15 +12,13 @@ function Tarefas() {
   const [filtro, setFiltro] = useState('todas');
 
   useEffect(() => {
-    // 2. Se não tiver usuário, limpa a tela e para
     if (!user) {
       setTarefas([]);
       return;
     }
-
-    // 3. O "espião" (onSnapshot) vai atualizar o setTarefas sozinho
     const unsubscribe = escutarTarefas(user.uid, setTarefas);
     return () => unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   // 4. Os handlers agora só chamam o serviço. Não usam mais setTarefas!
@@ -49,13 +48,13 @@ function Tarefas() {
   });
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '600px', margin: '0 auto' }}>
-      <h1>Mini-Tasks</h1>
+    <div className="max-w-2xl mx-auto p-6 font-sans">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">Mini-Tasks</h1>
 
       {/* 6. Passando os handlers para os componentes */}
       <FormularioTarefa onAdicionar={handleAdicionar} />
 
-      <p>{total} tarefa(s) — {pendentes} pendente(s)</p>
+      <p className="text-gray-600 mb-4">{total} tarefa(s) — {pendentes}  pendente(s)</p>
 
       {tarefas.length === 0 && <p>Nenhuma tarefa cadastrada. Adicione uma acima!</p>}
       {tarefas.length > 0 && tarefasFiltradas.length === 0 && <p>Nenhuma tarefa nesta categoria.</p>}
@@ -70,10 +69,10 @@ function Tarefas() {
         />
       ))}
 
-      <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-        <button onClick={() => setFiltro('todas')} style={{ fontWeight: filtro === 'todas' ? 'bold' : 'normal' }}>Todas</button>
-        <button onClick={() => setFiltro('pendentes')} style={{ fontWeight: filtro === 'pendentes' ? 'bold' : 'normal' }}>Pendentes</button>
-        <button onClick={() => setFiltro('concluidas')} style={{ fontWeight: filtro === 'concluidas' ? 'bold' : 'normal' }}>Concluídas</button>
+      <div className="flex gap-2 mt-6">
+        <Botao variant={filtro === 'todas' ? 'primario' : 'secundario'} onClick={() => setFiltro('todas')}>Todas</Botao>
+        <Botao variant={filtro === 'pendentes' ? 'primario' : 'secundario'} onClick={() => setFiltro('pendentes')}>Pendentes</Botao>
+        <Botao variant={filtro === 'concluidas' ? 'primario' : 'secundario'} onClick={() => setFiltro('concluidas')}>Concluídas</Botao>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import './css/home.estilos.css'
+import Botao from '../components/ui/Botao';
 function Home() {
   // Correção: Ajustado para usar a sintaxe padrão de quebra de linha <br /> do JSX
   return (
@@ -9,6 +9,9 @@ function Home() {
         Bem-vindo ao <br /><br /><br />
         <span className='titulo-app--destaque'>Mini-Tasks</span>!
       </h1>
+      <Botao variant="primario" onClick={() => alert('Funcionou!')}>
+        Tailwind funcionando!
+      </Botao>
     </section>
   );
 }
