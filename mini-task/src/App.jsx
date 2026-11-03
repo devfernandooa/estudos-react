@@ -4,31 +4,34 @@ import RotaProtegida from './components/RotaProtegida'; // Importa o segurança
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Tarefas from './pages/Tarefas';
-import './App.css'
 
 export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <nav className='nav-bar'>
-          <ul className='ul-nav-bar'>
-            <li className='li-ul-nav-bar'><Link to="/">Home</Link></li>
-            <li className='li-ul-nav-bar'><Link to="/login">Login</Link></li>
-            <li className='li-ul-nav-bar'><Link to="/tarefas">Tarefas</Link></li>
-          </ul>          
+        <nav className="bg-slate-800 p-4 flex items-center justify-between text-white">
+          {/* Lado Esquerdo: Logo */}
+          <div className="font-bold text-xl">Mini-Tasks</div>
+
+          {/* Lado Direito: Links */}
+          <div className="flex gap-6 items-center">
+            <Link to="/" className="hover:text-blue-400">Home</Link>
+            <Link to="/login" className="hover:text-blue-400">Login</Link>
+            <Link to="/tarefas" className="hover:text-blue-400">Tarefas</Link>
+          </div>
         </nav>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          
+
           {/* A rota de Tarefas agora está protegida! */}
-          <Route 
-            path="/tarefas" 
+          <Route
+            path="/tarefas"
             element={
               <RotaProtegida>
                 <Tarefas />
               </RotaProtegida>
-            } 
+            }
           />
         </Routes>
       </BrowserRouter>
